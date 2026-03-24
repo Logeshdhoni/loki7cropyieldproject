@@ -1,4 +1,4 @@
-import os
+﻿import os
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 st.set_page_config(
     page_title="CropSense - AI Crop Recommendation",
-    page_icon="🌱",
+    page_icon="ðŸŒ±",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -54,8 +54,7 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; background: #f8fd
     color: white; font-size: 1.1rem; font-weight: 700; padding: 16px 40px;
     border-radius: 50px; border: none; width: 100%;
     box-shadow: 0 4px 15px rgba(46,125,50,0.35); }
-.how-step { background: #f9fbe7; border-radius: 12px; padding: 16px 20px;
-    margin-bottom: 10px; border-left: 4px solid #8bc34a; font-size: 0.95rem; }
+.how-step { background: #f9fbe7; border-radius: 12px; padding: 16px 20px; margin-bottom: 10px; border-left: 4px solid #8bc34a; font-size: 0.95rem; color: #1a1a1a !important; }
 footer { text-align: center; color: #aaa; font-size: 0.82rem;
     margin-top: 50px; padding: 24px; border-top: 1px solid #e0e0e0; }
 </style>
@@ -79,7 +78,7 @@ model = get_model()
 
 st.markdown("""
 <div class="hero">
-    <h1>🌱 CropSense</h1>
+    <h1>ðŸŒ± CropSense</h1>
     <p>AI-Powered Crop Recommendation System</p>
     <p style="opacity:0.75; font-size:0.95rem;">
         Enter your soil nutrients and climate conditions to discover the best crop for your land
@@ -98,7 +97,7 @@ for col, val, lbl in zip([c1,c2,c3,c4], ["22+","KNN","7","Free"],
 st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown('<div class="card">', unsafe_allow_html=True)
-st.markdown('<div class="section-title">🧪 Soil Nutrients (NPK)</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Soil Nutrients (NPK)</div>', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 with col1: N = st.slider("Nitrogen (N)", 0, 140, 90)
 with col2: P = st.slider("Phosphorus (P)", 5, 145, 42)
@@ -106,7 +105,7 @@ with col3: K = st.slider("Potassium (K)", 5, 205, 43)
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown('<div class="card">', unsafe_allow_html=True)
-st.markdown('<div class="section-title">🌤 Climate Conditions</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Climate Conditions</div>', unsafe_allow_html=True)
 col4, col5, col6, col7 = st.columns(4)
 with col4: temperature = st.number_input("Temperature (C)", 0.0, 50.0, 20.87, step=0.1)
 with col5: humidity = st.number_input("Humidity (%)", 0.0, 100.0, 82.00, step=0.1)
@@ -116,7 +115,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 _, mid, _ = st.columns([1, 2, 1])
 with mid:
-    predict = st.button("🌾 Get Crop Recommendation")
+    predict = st.button("Get Crop Recommendation")
 
 if predict:
     inp = np.array([N, P, K, temperature, humidity, ph, rainfall]).reshape(1, -1)
@@ -124,7 +123,7 @@ if predict:
     confidence = round(max(model.predict_proba(inp)[0]) * 100, 1)
     st.markdown(f"""
     <div class="result-box">
-        <div class="result-crop">🌾 {crop.upper()}</div>
+        <div class="result-crop">{crop.upper()}</div>
         <div class="result-sub">Best crop for your soil and climate conditions</div>
         <div class="confidence">Model Confidence: {confidence}%</div>
         <div style="margin-top:10px;font-size:0.85rem;color:#777;">
@@ -147,5 +146,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("""
 <footer>
-    <strong>CropSense</strong> &mdash; AI Crop Recommendation &bull; KNN Algorithm &bull; Powered by Streamlit
+    <strong>CropSense</strong> - AI Crop Recommendation - KNN Algorithm - Powered by Streamlit
 </footer>""", unsafe_allow_html=True)
+
+
