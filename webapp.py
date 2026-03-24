@@ -1,4 +1,4 @@
-﻿import os
+import os
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 st.set_page_config(
     page_title="CropSense - AI Crop Recommendation",
-    page_icon="ðŸŒ±",
+    page_icon="🌱",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -48,46 +48,37 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; background: #f0f7
 .metric-lbl { font-size: 0.8rem; color: #555; margin-top: 4px; font-weight: 500; }
 .result-box {
     background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
-    border-left: 6px solid #2e7d32; border-radius: 16px; padding: 36px;
+    border-left: 6px solid #2e7d32; border-radius: 16px; padding: 40px;
     text-align: center; margin-top: 24px; box-shadow: 0 4px 20px rgba(46,125,50,0.15);
 }
-.result-crop { font-size: 2.8rem; font-weight: 800; color: #1b5e20; }
-.result-sub  { font-size: 1rem; color: #444; margin-top: 8px; }
-.confidence  { font-size: 1.1rem; color: #2e7d32; font-weight: 600; margin-top: 12px; }
+.result-crop { font-size: 3rem; font-weight: 800; color: #1b5e20; letter-spacing: 2px; }
+.result-sub  { font-size: 1rem; color: #444; margin-top: 10px; }
+.confidence  { font-size: 1.2rem; color: #2e7d32; font-weight: 700; margin-top: 14px; }
 .stButton>button {
     background: linear-gradient(135deg, #2e7d32, #43a047);
     color: white; font-size: 1.1rem; font-weight: 700; padding: 16px 40px;
     border-radius: 50px; border: none; width: 100%;
     box-shadow: 0 4px 15px rgba(46,125,50,0.35);
 }
+.agri-card {
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12); margin-bottom: 16px;
+}
+.agri-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+.agri-card-body { background: white; padding: 18px 20px; }
+.agri-card-title { font-size: 1rem; font-weight: 700; color: #1b5e20; margin-bottom: 6px; }
+.agri-card-text  { font-size: 0.88rem; color: #444; line-height: 1.5; }
+.tip-box {
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    border-radius: 14px; padding: 20px 24px; border: 1px solid #c8e6c9; margin-bottom: 14px;
+}
+.tip-box-title { font-size: 0.9rem; font-weight: 700; color: #2e7d32; margin-bottom: 6px; }
+.tip-box-text  { font-size: 0.85rem; color: #333; line-height: 1.6; }
 .how-step {
     background: #f9fbe7; border-radius: 12px; padding: 16px 20px;
     margin-bottom: 10px; border-left: 4px solid #8bc34a;
     font-size: 0.95rem; color: #1a1a1a !important;
 }
-.agri-card {
-    border-radius: 18px; overflow: hidden; position: relative;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.12); margin-bottom: 16px;
-}
-.agri-card img {
-    width: 100%; height: 200px; object-fit: cover; display: block;
-}
-.agri-card-body {
-    background: white; padding: 18px 20px;
-}
-.agri-card-title {
-    font-size: 1rem; font-weight: 700; color: #1b5e20; margin-bottom: 6px;
-}
-.agri-card-text {
-    font-size: 0.88rem; color: #444; line-height: 1.5;
-}
-.tip-box {
-    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-    border-radius: 14px; padding: 20px 24px; border: 1px solid #c8e6c9;
-    margin-bottom: 14px;
-}
-.tip-box-title { font-size: 0.9rem; font-weight: 700; color: #2e7d32; margin-bottom: 6px; }
-.tip-box-text  { font-size: 0.85rem; color: #333; line-height: 1.6; }
 footer {
     text-align: center; color: #888; font-size: 0.82rem;
     margin-top: 50px; padding: 24px; border-top: 1px solid #ddd;
@@ -111,46 +102,19 @@ def get_model():
 
 model = get_model()
 
-CROP_IMAGES = {
-    "rice":        "https://images.unsplash.com/photo-1536054985673-4be47ef991d4?w=600&q=80",
-    "maize":       "https://images.unsplash.com/photo-1601593346740-925612772716?w=600&q=80",
-    "chickpea":    "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
-    "kidneybeans": "https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=600&q=80",
-    "pigeonpeas":  "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
-    "mothbeans":   "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
-    "mungbean":    "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
-    "blackgram":   "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
-    "lentil":      "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
-    "pomegranate": "https://images.unsplash.com/photo-1541344999736-83eca272f6fc?w=600&q=80",
-    "banana":      "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80",
-    "mango":       "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80",
-    "grapes":      "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600&q=80",
-    "watermelon":  "https://images.unsplash.com/photo-1563114773-84221bd62daa?w=600&q=80",
-    "muskmelon":   "https://images.unsplash.com/photo-1571575173700-afb9492e6a50?w=600&q=80",
-    "apple":       "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&q=80",
-    "orange":      "https://images.unsplash.com/photo-1547514701-42782101795e?w=600&q=80",
-    "papaya":      "https://images.unsplash.com/photo-1526318472351-c75fcf070305?w=600&q=80",
-    "coconut":     "https://images.unsplash.com/photo-1580984969071-a8da8e2e6a81?w=600&q=80",
-    "cotton":      "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&q=80",
-    "jute":        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80",
-    "coffee":      "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80",
-}
-DEFAULT_IMG = "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80"
-
-
-# â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HERO
 st.markdown("""
 <div class="hero">
-    <h1>ðŸŒ± CropSense</h1>
+    <h1>CropSense</h1>
     <p>AI-Powered Crop Recommendation System</p>
     <p style="opacity:0.75; font-size:0.95rem;">
         Enter your soil nutrients and climate conditions to discover the best crop for your land
     </p>
-    <span class="badge">âœ¦ K-Nearest Neighbors Algorithm âœ¦</span>
+    <span class="badge">K-Nearest Neighbors Algorithm</span>
 </div>
 """, unsafe_allow_html=True)
 
-# â”€â”€ METRICS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# METRICS
 c1, c2, c3, c4 = st.columns(4)
 for col, val, lbl in zip([c1,c2,c3,c4], ["22+","KNN","7","Free"],
                           ["Crop Types","Algorithm","Input Features","To Use"]):
@@ -160,35 +124,35 @@ for col, val, lbl in zip([c1,c2,c3,c4], ["22+","KNN","7","Free"],
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# â”€â”€ AGRICULTURE IMAGE BANNER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# AGRICULTURE IMAGE BANNER
 st.markdown("""
 <div style="display:flex; gap:16px; margin-bottom:28px;">
     <div class="agri-card" style="flex:1;">
         <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80" alt="Farm field">
         <div class="agri-card-body">
-            <div class="agri-card-title">ðŸŒ¾ Smart Farming</div>
-            <div class="agri-card-text">Use AI to choose the right crop based on your soil and climate â€” maximize your yield every season.</div>
+            <div class="agri-card-title">Smart Farming</div>
+            <div class="agri-card-text">Use AI to choose the right crop based on your soil and climate. Maximize your yield every season.</div>
         </div>
     </div>
     <div class="agri-card" style="flex:1;">
         <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80" alt="Soil testing">
         <div class="agri-card-body">
-            <div class="agri-card-title">ðŸ§ª Soil Intelligence</div>
+            <div class="agri-card-title">Soil Intelligence</div>
             <div class="agri-card-text">NPK levels directly affect crop health. Our model analyzes nitrogen, phosphorus and potassium to guide your decision.</div>
         </div>
     </div>
     <div class="agri-card" style="flex:1;">
         <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80" alt="Rainfall crops">
         <div class="agri-card-body">
-            <div class="agri-card-title">ðŸŒ§ï¸ Climate Aware</div>
+            <div class="agri-card-title">Climate Aware</div>
             <div class="agri-card-text">Temperature, humidity and rainfall patterns are key. CropSense factors in all climate variables for accurate results.</div>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# â”€â”€ SOIL INPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-st.markdown('<div class="section-title">ðŸ§ª Soil Nutrients (NPK Ratio)</div>', unsafe_allow_html=True)
+# SOIL INPUTS
+st.markdown('<div class="section-title">Soil Nutrients (NPK Ratio)</div>', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 with col1: N = st.slider("Nitrogen (N)", 0, 140, 69)
 with col2: P = st.slider("Phosphorus (P)", 5, 145, 76)
@@ -196,8 +160,8 @@ with col3: K = st.slider("Potassium (K)", 5, 205, 104)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# â”€â”€ CLIMATE INPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-st.markdown('<div class="section-title">ðŸŒ¤ Climate Conditions</div>', unsafe_allow_html=True)
+# CLIMATE INPUTS
+st.markdown('<div class="section-title">Climate Conditions</div>', unsafe_allow_html=True)
 col4, col5, col6, col7 = st.columns(4)
 with col4: temperature = st.number_input("Temperature (C)", 0.0, 50.0, 25.9, step=0.1)
 with col5: humidity = st.number_input("Humidity (%)", 0.0, 100.0, 57.0, step=0.1)
@@ -206,83 +170,71 @@ with col7: rainfall = st.number_input("Rainfall (mm)", 0.0, 500.0, 162.2, step=0
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# â”€â”€ PREDICT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# PREDICT BUTTON
 _, mid, _ = st.columns([1, 2, 1])
 with mid:
-    predict = st.button("ðŸŒ¾ Get Crop Recommendation")
+    predict = st.button("Get Crop Recommendation")
 
 if predict:
     inp = np.array([N, P, K, temperature, humidity, ph, rainfall]).reshape(1, -1)
     crop = model.predict(inp)[0]
     confidence = round(max(model.predict_proba(inp)[0]) * 100, 1)
-    img_url = CROP_IMAGES.get(crop.lower().replace(" ", ""), DEFAULT_IMG)
-    left, right = st.columns([1, 1])
-    with left:
-        st.markdown(f'''
-        <div style="border-radius:20px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.15);">
-            <img src="{img_url}" style="width:100%; height:320px; object-fit:cover;" alt="{crop}">
-            <div style="background:linear-gradient(135deg,#1b5e20,#2e7d32); padding:16px 20px; text-align:center;">
-                <span style="color:white; font-size:1.4rem; font-weight:800; letter-spacing:2px;">{crop.upper()}</span>
-            </div>
-        </div>''', unsafe_allow_html=True)
-    with right:
-        st.markdown(f'''
-        <div class="result-box" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-size:3rem; margin-bottom:10px;">ðŸŒ¾</div>
-            <div class="result-crop">{crop.upper()}</div>
-            <div class="result-sub">Best crop for your soil and climate conditions</div>
-            <div class="confidence">Model Confidence: {confidence}%</div>
-            <div style="margin-top:12px; font-size:0.85rem; color:#777;">
-                Predicted using K-Nearest Neighbors (k=5, Euclidean distance)
-            </div>
-        </div>''', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="result-box">
+        <div class="result-crop">{crop.upper()}</div>
+        <div class="result-sub">Best crop for your soil and climate conditions</div>
+        <div class="confidence">Model Confidence: {confidence}%</div>
+        <div style="margin-top:12px; font-size:0.85rem; color:#777;">
+            Predicted using K-Nearest Neighbors (k=5, Euclidean distance)
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     st.balloons()
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# â”€â”€ FARMING TIPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-st.markdown('<div class="section-title">ðŸŒ¿ Farming Tips</div>', unsafe_allow_html=True)
+# FARMING TIPS
+st.markdown('<div class="section-title">Farming Tips</div>', unsafe_allow_html=True)
 tip1, tip2 = st.columns(2)
 with tip1:
     st.markdown("""
     <div class="tip-box">
-        <div class="tip-box-title">ðŸ’§ Water Management</div>
-        <div class="tip-box-text">Overwatering is as harmful as drought. Match your irrigation schedule to the crop's rainfall requirement for best results.</div>
+        <div class="tip-box-title">Water Management</div>
+        <div class="tip-box-text">Overwatering is as harmful as drought. Match your irrigation schedule to the crop rainfall requirement for best results.</div>
     </div>
     <div class="tip-box">
-        <div class="tip-box-title">ðŸŒ¡ï¸ Temperature Matters</div>
-        <div class="tip-box-text">Each crop has an ideal temperature range. Planting outside that range reduces yield significantly â€” always check before sowing.</div>
+        <div class="tip-box-title">Temperature Matters</div>
+        <div class="tip-box-text">Each crop has an ideal temperature range. Planting outside that range reduces yield significantly. Always check before sowing.</div>
     </div>
     """, unsafe_allow_html=True)
 with tip2:
     st.markdown("""
     <div class="tip-box">
-        <div class="tip-box-title">ðŸ§± Soil pH Balance</div>
-        <div class="tip-box-text">Most crops thrive between pH 6.0â€“7.5. Test your soil regularly and use lime or sulfur to adjust pH for optimal nutrient absorption.</div>
+        <div class="tip-box-title">Soil pH Balance</div>
+        <div class="tip-box-text">Most crops thrive between pH 6.0 to 7.5. Test your soil regularly and use lime or sulfur to adjust pH for optimal nutrient absorption.</div>
     </div>
     <div class="tip-box">
-        <div class="tip-box-title">ðŸŒ± NPK Fertilization</div>
+        <div class="tip-box-title">NPK Fertilization</div>
         <div class="tip-box-text">Nitrogen boosts leaf growth, Phosphorus strengthens roots, Potassium improves fruit quality. Balance all three for a healthy crop.</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-st.markdown('<div class="section-title">âš™ï¸ How It Works</div>', unsafe_allow_html=True)
+# HOW IT WORKS
+st.markdown('<div class="section-title">How It Works</div>', unsafe_allow_html=True)
 for step in [
-    "1. Enter your soil nutrient values â€” Nitrogen, Phosphorus, Potassium",
-    "2. Provide your local climate data â€” temperature, humidity, pH, rainfall",
+    "1. Enter your soil nutrient values - Nitrogen, Phosphorus, Potassium",
+    "2. Provide your local climate data - temperature, humidity, pH, rainfall",
     "3. The KNN algorithm finds the 5 most similar soil-climate profiles in the dataset",
     "4. The most common crop among those neighbors is recommended to you"
 ]:
     st.markdown(f'<div class="how-step">{step}</div>', unsafe_allow_html=True)
 
-# â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# FOOTER
 st.markdown("""
 <footer>
-    <strong>CropSense</strong> &mdash; AI Crop Recommendation System &bull; KNN Algorithm &bull; Powered by Streamlit<br>
-    <span style="font-size:0.75rem;color:#bbb;">crop recommendation | KNN prediction | soil analysis AI | precision agriculture</span>
+    <strong>CropSense</strong> - AI Crop Recommendation System - KNN Algorithm - Powered by Streamlit<br>
+    <span style="font-size:0.75rem; color:#bbb;">crop recommendation | KNN prediction | soil analysis AI | precision agriculture</span>
 </footer>
 """, unsafe_allow_html=True)
-
