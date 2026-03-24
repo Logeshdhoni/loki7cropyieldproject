@@ -111,6 +111,33 @@ def get_model():
 
 model = get_model()
 
+CROP_IMAGES = {
+    "rice":        "https://images.unsplash.com/photo-1536054985673-4be47ef991d4?w=600&q=80",
+    "maize":       "https://images.unsplash.com/photo-1601593346740-925612772716?w=600&q=80",
+    "chickpea":    "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
+    "kidneybeans": "https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=600&q=80",
+    "pigeonpeas":  "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
+    "mothbeans":   "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
+    "mungbean":    "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
+    "blackgram":   "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
+    "lentil":      "https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=600&q=80",
+    "pomegranate": "https://images.unsplash.com/photo-1541344999736-83eca272f6fc?w=600&q=80",
+    "banana":      "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80",
+    "mango":       "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80",
+    "grapes":      "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600&q=80",
+    "watermelon":  "https://images.unsplash.com/photo-1563114773-84221bd62daa?w=600&q=80",
+    "muskmelon":   "https://images.unsplash.com/photo-1571575173700-afb9492e6a50?w=600&q=80",
+    "apple":       "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&q=80",
+    "orange":      "https://images.unsplash.com/photo-1547514701-42782101795e?w=600&q=80",
+    "papaya":      "https://images.unsplash.com/photo-1526318472351-c75fcf070305?w=600&q=80",
+    "coconut":     "https://images.unsplash.com/photo-1580984969071-a8da8e2e6a81?w=600&q=80",
+    "cotton":      "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&q=80",
+    "jute":        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80",
+    "coffee":      "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80",
+}
+DEFAULT_IMG = "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80"
+
+
 # ── HERO ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero">
@@ -188,15 +215,27 @@ if predict:
     inp = np.array([N, P, K, temperature, humidity, ph, rainfall]).reshape(1, -1)
     crop = model.predict(inp)[0]
     confidence = round(max(model.predict_proba(inp)[0]) * 100, 1)
-    st.markdown(f"""
-    <div class="result-box">
-        <div class="result-crop">🌾 {crop.upper()}</div>
-        <div class="result-sub">Best crop for your soil and climate conditions</div>
-        <div class="confidence">Model Confidence: {confidence}%</div>
-        <div style="margin-top:10px;font-size:0.85rem;color:#777;">
-            Predicted using K-Nearest Neighbors (k=5, Euclidean distance)
-        </div>
-    </div>""", unsafe_allow_html=True)
+    img_url = CROP_IMAGES.get(crop.lower().replace(" ", ""), DEFAULT_IMG)
+    left, right = st.columns([1, 1])
+    with left:
+        st.markdown(f'''
+        <div style="border-radius:20px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.15);">
+            <img src="{img_url}" style="width:100%; height:320px; object-fit:cover;" alt="{crop}">
+            <div style="background:linear-gradient(135deg,#1b5e20,#2e7d32); padding:16px 20px; text-align:center;">
+                <span style="color:white; font-size:1.4rem; font-weight:800; letter-spacing:2px;">{crop.upper()}</span>
+            </div>
+        </div>''', unsafe_allow_html=True)
+    with right:
+        st.markdown(f'''
+        <div class="result-box" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:3rem; margin-bottom:10px;">🌾</div>
+            <div class="result-crop">{crop.upper()}</div>
+            <div class="result-sub">Best crop for your soil and climate conditions</div>
+            <div class="confidence">Model Confidence: {confidence}%</div>
+            <div style="margin-top:12px; font-size:0.85rem; color:#777;">
+                Predicted using K-Nearest Neighbors (k=5, Euclidean distance)
+            </div>
+        </div>''', unsafe_allow_html=True)
     st.balloons()
 
 st.markdown("<br>", unsafe_allow_html=True)
