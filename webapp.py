@@ -1,4 +1,4 @@
-import os
+﻿import os
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 st.set_page_config(
     page_title="CropSense - AI Crop Recommendation",
-    page_icon="🌱",
+    page_icon="ðŸŒ±",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -138,19 +138,19 @@ CROP_IMAGES = {
 DEFAULT_IMG = "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80"
 
 
-# ── HERO ──────────────────────────────────────────────────────────────────────
+# â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 st.markdown("""
 <div class="hero">
-    <h1>🌱 CropSense</h1>
+    <h1>ðŸŒ± CropSense</h1>
     <p>AI-Powered Crop Recommendation System</p>
     <p style="opacity:0.75; font-size:0.95rem;">
         Enter your soil nutrients and climate conditions to discover the best crop for your land
     </p>
-    <span class="badge">✦ K-Nearest Neighbors Algorithm ✦</span>
+    <span class="badge">âœ¦ K-Nearest Neighbors Algorithm âœ¦</span>
 </div>
 """, unsafe_allow_html=True)
 
-# ── METRICS ───────────────────────────────────────────────────────────────────
+# â”€â”€ METRICS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 c1, c2, c3, c4 = st.columns(4)
 for col, val, lbl in zip([c1,c2,c3,c4], ["22+","KNN","7","Free"],
                           ["Crop Types","Algorithm","Input Features","To Use"]):
@@ -160,56 +160,56 @@ for col, val, lbl in zip([c1,c2,c3,c4], ["22+","KNN","7","Free"],
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── AGRICULTURE IMAGE BANNER ──────────────────────────────────────────────────
+# â”€â”€ AGRICULTURE IMAGE BANNER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 st.markdown("""
 <div style="display:flex; gap:16px; margin-bottom:28px;">
     <div class="agri-card" style="flex:1;">
         <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80" alt="Farm field">
         <div class="agri-card-body">
-            <div class="agri-card-title">🌾 Smart Farming</div>
-            <div class="agri-card-text">Use AI to choose the right crop based on your soil and climate — maximize your yield every season.</div>
+            <div class="agri-card-title">ðŸŒ¾ Smart Farming</div>
+            <div class="agri-card-text">Use AI to choose the right crop based on your soil and climate â€” maximize your yield every season.</div>
         </div>
     </div>
     <div class="agri-card" style="flex:1;">
         <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80" alt="Soil testing">
         <div class="agri-card-body">
-            <div class="agri-card-title">🧪 Soil Intelligence</div>
+            <div class="agri-card-title">ðŸ§ª Soil Intelligence</div>
             <div class="agri-card-text">NPK levels directly affect crop health. Our model analyzes nitrogen, phosphorus and potassium to guide your decision.</div>
         </div>
     </div>
     <div class="agri-card" style="flex:1;">
         <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=600&q=80" alt="Rainfall crops">
         <div class="agri-card-body">
-            <div class="agri-card-title">🌧️ Climate Aware</div>
+            <div class="agri-card-title">ðŸŒ§ï¸ Climate Aware</div>
             <div class="agri-card-text">Temperature, humidity and rainfall patterns are key. CropSense factors in all climate variables for accurate results.</div>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# ── SOIL INPUTS ───────────────────────────────────────────────────────────────
-st.markdown('<div class="section-title">🧪 Soil Nutrients (NPK Ratio)</div>', unsafe_allow_html=True)
+# â”€â”€ SOIL INPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+st.markdown('<div class="section-title">ðŸ§ª Soil Nutrients (NPK Ratio)</div>', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
-with col1: N = st.slider("Nitrogen (N)", 0, 140, 90)
-with col2: P = st.slider("Phosphorus (P)", 5, 145, 42)
-with col3: K = st.slider("Potassium (K)", 5, 205, 43)
+with col1: N = st.slider("Nitrogen (N)", 0, 140, 69)
+with col2: P = st.slider("Phosphorus (P)", 5, 145, 76)
+with col3: K = st.slider("Potassium (K)", 5, 205, 104)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── CLIMATE INPUTS ────────────────────────────────────────────────────────────
-st.markdown('<div class="section-title">🌤 Climate Conditions</div>', unsafe_allow_html=True)
+# â”€â”€ CLIMATE INPUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+st.markdown('<div class="section-title">ðŸŒ¤ Climate Conditions</div>', unsafe_allow_html=True)
 col4, col5, col6, col7 = st.columns(4)
-with col4: temperature = st.number_input("Temperature (C)", 0.0, 50.0, 20.87, step=0.1)
-with col5: humidity = st.number_input("Humidity (%)", 0.0, 100.0, 82.00, step=0.1)
-with col6: ph = st.number_input("Soil pH", 0.0, 14.0, 6.50, step=0.1)
-with col7: rainfall = st.number_input("Rainfall (mm)", 0.0, 500.0, 202.93, step=0.1)
+with col4: temperature = st.number_input("Temperature (C)", 0.0, 50.0, 25.9, step=0.1)
+with col5: humidity = st.number_input("Humidity (%)", 0.0, 100.0, 57.0, step=0.1)
+with col6: ph = st.number_input("Soil pH", 0.0, 14.0, 6.7, step=0.1)
+with col7: rainfall = st.number_input("Rainfall (mm)", 0.0, 500.0, 162.2, step=0.1)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── PREDICT ───────────────────────────────────────────────────────────────────
+# â”€â”€ PREDICT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 _, mid, _ = st.columns([1, 2, 1])
 with mid:
-    predict = st.button("🌾 Get Crop Recommendation")
+    predict = st.button("ðŸŒ¾ Get Crop Recommendation")
 
 if predict:
     inp = np.array([N, P, K, temperature, humidity, ph, rainfall]).reshape(1, -1)
@@ -228,7 +228,7 @@ if predict:
     with right:
         st.markdown(f'''
         <div class="result-box" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-size:3rem; margin-bottom:10px;">🌾</div>
+            <div style="font-size:3rem; margin-bottom:10px;">ðŸŒ¾</div>
             <div class="result-crop">{crop.upper()}</div>
             <div class="result-sub">Best crop for your soil and climate conditions</div>
             <div class="confidence">Model Confidence: {confidence}%</div>
@@ -240,48 +240,49 @@ if predict:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── FARMING TIPS ──────────────────────────────────────────────────────────────
-st.markdown('<div class="section-title">🌿 Farming Tips</div>', unsafe_allow_html=True)
+# â”€â”€ FARMING TIPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+st.markdown('<div class="section-title">ðŸŒ¿ Farming Tips</div>', unsafe_allow_html=True)
 tip1, tip2 = st.columns(2)
 with tip1:
     st.markdown("""
     <div class="tip-box">
-        <div class="tip-box-title">💧 Water Management</div>
+        <div class="tip-box-title">ðŸ’§ Water Management</div>
         <div class="tip-box-text">Overwatering is as harmful as drought. Match your irrigation schedule to the crop's rainfall requirement for best results.</div>
     </div>
     <div class="tip-box">
-        <div class="tip-box-title">🌡️ Temperature Matters</div>
-        <div class="tip-box-text">Each crop has an ideal temperature range. Planting outside that range reduces yield significantly — always check before sowing.</div>
+        <div class="tip-box-title">ðŸŒ¡ï¸ Temperature Matters</div>
+        <div class="tip-box-text">Each crop has an ideal temperature range. Planting outside that range reduces yield significantly â€” always check before sowing.</div>
     </div>
     """, unsafe_allow_html=True)
 with tip2:
     st.markdown("""
     <div class="tip-box">
-        <div class="tip-box-title">🧱 Soil pH Balance</div>
-        <div class="tip-box-text">Most crops thrive between pH 6.0–7.5. Test your soil regularly and use lime or sulfur to adjust pH for optimal nutrient absorption.</div>
+        <div class="tip-box-title">ðŸ§± Soil pH Balance</div>
+        <div class="tip-box-text">Most crops thrive between pH 6.0â€“7.5. Test your soil regularly and use lime or sulfur to adjust pH for optimal nutrient absorption.</div>
     </div>
     <div class="tip-box">
-        <div class="tip-box-title">🌱 NPK Fertilization</div>
+        <div class="tip-box-title">ðŸŒ± NPK Fertilization</div>
         <div class="tip-box-text">Nitrogen boosts leaf growth, Phosphorus strengthens roots, Potassium improves fruit quality. Balance all three for a healthy crop.</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── HOW IT WORKS ──────────────────────────────────────────────────────────────
-st.markdown('<div class="section-title">⚙️ How It Works</div>', unsafe_allow_html=True)
+# â”€â”€ HOW IT WORKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+st.markdown('<div class="section-title">âš™ï¸ How It Works</div>', unsafe_allow_html=True)
 for step in [
-    "1. Enter your soil nutrient values — Nitrogen, Phosphorus, Potassium",
-    "2. Provide your local climate data — temperature, humidity, pH, rainfall",
+    "1. Enter your soil nutrient values â€” Nitrogen, Phosphorus, Potassium",
+    "2. Provide your local climate data â€” temperature, humidity, pH, rainfall",
     "3. The KNN algorithm finds the 5 most similar soil-climate profiles in the dataset",
     "4. The most common crop among those neighbors is recommended to you"
 ]:
     st.markdown(f'<div class="how-step">{step}</div>', unsafe_allow_html=True)
 
-# ── FOOTER ────────────────────────────────────────────────────────────────────
+# â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 st.markdown("""
 <footer>
     <strong>CropSense</strong> &mdash; AI Crop Recommendation System &bull; KNN Algorithm &bull; Powered by Streamlit<br>
     <span style="font-size:0.75rem;color:#bbb;">crop recommendation | KNN prediction | soil analysis AI | precision agriculture</span>
 </footer>
 """, unsafe_allow_html=True)
+
